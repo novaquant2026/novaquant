@@ -1,0 +1,43 @@
+steps:
+  # 1. Build application bundle
+  - name: 'node:22-bookworm-slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        npm ci
+        npm run build
+
+  # 2. Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/novaquant-ai-trading-bot/novaquant-ai-trading-bot:$BUILD_ID'
+      - '.'
+
+  # 3. Push immutable build image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/novaquant-ai-trading-bot/novaquant-ai-trading-bot:$BUILD_ID'
+
+  # 4. Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'novaquant-ai-trading-bot'
+      - '--image'
+      - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/novaquant-ai-trading-bot/novaquant-ai-trading-bot:$BUILD_ID'
+      - '--region'
+      - 'asia-southeast1'
+      - '--platform'
+      - 'managed'
+
+images:
+  - 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/novaquant-ai-trading-bot/novaquant-ai-trading-bot:$BUILD_ID'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

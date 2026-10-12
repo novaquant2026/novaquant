@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "status": "RUNNING",
+  "updated_at": 1789379760411,
+  "previous_status": "PAUSED",
+  "action": "RESUME",
+  "reason": "Resume verification",
+  "active_processes_running": 1,
+  "metadata": "{\"ip\":\"127.0.0.1\",\"userAgent\":\"curl/7.88.1\",\"timestampIso\":\"2026-09-14T09:56:00.411Z\"}"
+}
