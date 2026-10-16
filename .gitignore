@@ -4,3 +4,9 @@ dist/
 data/*.db
 database/*.db
 .env
+
+.env
+.env.*
+node_modules/
+*.tar.gz
+*.zip
